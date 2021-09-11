@@ -33,18 +33,23 @@
         </div>
         <div class="modal-body">
           <div class="bd-example mb-3">
-          <img class="bd-placeholder-img card-img-top" height="225"  width="100%" 
-              src="img/Freestyler.jpg"
-              alt="Freestyler ?>"
+          <img class="bd-placeholder-img card-img-top title-image" height="225"  width="100%" 
+              src="<?php echo URLROOT . UPLOAD_DIR ?>"
+              alt="Freestyler"
               >
           </div>
-            <form action="">
+            <form action="" method="POST">
             <div class="form-floating">
-                <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 100px"></textarea>
+              <input type="text" class="form-control mb-2" placeholder="Enter title" id="floatingInput2" style="height: 50px" name="title"></input>
+              <label for="floatingInput2">Title</label>
+            </div>
+            <div class="form-floating">
+                <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 100px" name="body"></textarea>
                 <label for="floatingTextarea2">Comments</label>
             </div>
+              <input type="hidden" name="redirect" value="false">
               <button type="button" class="btn btn-secondary mt-2" data-bs-dismiss="modal">Close</button>
-              <button type="submit" class="btn btn-primary mt-2">Save changes</button>
+              <button type="submit" class="btn btn-primary mt-2">Add comment</button>
             </form>
         </div>
         <div class="modal-footer">
@@ -72,9 +77,9 @@
                 <p class="card-text"><?php echo $image->last_comment; ?></p>
                 <div class="d-flex justify-content-between align-items-center">
                   <div class="btn-group">
-                    <a href="<?php echo URLROOT; ?>/images/show/<?php echo $image->id; ?>" class="btn btn-sm btn-outline-secondary">Show</a>
+                    <a href="<?php echo URLROOT; ?>/images/show/<?php echo $image->id; ?>" class="btn btn-sm btn-outline-secondary show">Show</a>
                     <?php if(isLoggedIn()) : ?>
-                    <a href="<?php echo URLROOT; ?>/images/comment/<?php echo $image->id; ?>" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#exampleModalDefault">Comment</a>
+                    <a href="<?php echo URLROOT; ?>/comments/add/<?php echo $image->id; ?>" class="btn btn-sm btn-outline-secondary comment" data-bs-toggle="modal" data-bs-target="#exampleModalDefault">Comment</a>
                     <?php endif; ?>
                   </div>
                   <small class="text-muted"><?php echo $image->last_comment_date; ?></small>
@@ -88,5 +93,5 @@
   </div>
 
 </main>
-
+<script src="<?php echo URLROOT . '/public/js/pages_index.js' ;?>"></script>
 <?php require APPROOT . '/views/inc/footer.php'; ?>

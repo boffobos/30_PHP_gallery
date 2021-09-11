@@ -33,6 +33,7 @@
                     'title_err' => '',
                     'body_err' => '',
                     'image_id' => $image_id,
+                    'redirect' => $_POST['redirect'],
                 ];
 
                 //Validate title
@@ -48,7 +49,12 @@
                     //VAlidated
                     if($this->commentModel->addComment($data)){
                         flash('comment_message', 'Comment Added');
+                        if($data['redirect'] == 'true') {
                         redirect('images/show/' . $image_id . '#comments');
+                        } else {
+                            redirect('pages/index');
+                        }
+
                     } else {
                         die('something went wrong');
                     }
