@@ -4,6 +4,7 @@
 
             $this->imageModel = $this->model('Image');
             $this->userModel = $this->model('User');
+            $this->commentModel = $this->model('Comment');
 
         }
 
@@ -31,10 +32,10 @@
                             continue;
                         }
                 
-                        $filePath = UPLOAD_DIR . basename($fileName);
+                        $filePath = ROOT_DIR . UPLOAD_DIR . basename($fileName);
                 
                         if (!move_uploaded_file($_FILES['files']['tmp_name'][$i], $filePath)) {
-                            $data['errors'][] = 'Uloading error ' . $fileName;
+                            $data['errors'][] = 'Uploading error ' . $fileName;
                             continue;
                         }
                         $data[$i] = [
@@ -46,8 +47,9 @@
                         
                     }
                     $this->imageModel->upload($data);
+                    flash ('upload_success', 'Files uploaded succesfully');
                 }
-
+                
                 $this->view('images/upload', $data);
 
             } else {
@@ -63,12 +65,39 @@
         public function show($id){
             $image = $this->imageModel->getImageById($id);
             $user = $this->userModel->getUserById($image->user_id);
+            $comments = $this->commentModel->getCommentsByImageId($id);
 
             $data = [
                 'image' => $image,
                 'user' => $user,
+                'comments' => $comments,
             ];
 
             $this->view('images/show', $data);
+        }
+
+        public function delete($id){
+            $image = $this->imageModel->getImageById($id);
+            if($_SERVER['REQUEST_METHOD'] === 'POST'){
+
+                //Check for owner
+                if($image->user_id != $_SESSION['user_id']){
+                    redirect('images/show/' . $id);
+                } else {
+                    if(unlink($image->path)) {
+                        if($this->imageModel->deleteImage($id)){
+                        flash('comment_message', 'Image removed');
+                        redirect('pages/index/');
+                        } else {
+                            die('image entry has not been erased from data base');
+                        }
+                        
+                    } else {
+                        die('image file has not been deleted from dist');
+                    }
+                }    
+            } else {
+                redirect('images/show/' . $id);
+            }
         }
     }

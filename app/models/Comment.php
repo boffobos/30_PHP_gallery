@@ -23,11 +23,12 @@
         }
 
         public function addComment($data){
-            $this->db->query('INSERT INTO comments (title, user_id, body) VALUES(:title, :user_id, :body)');
+            $this->db->query('INSERT INTO comments (title, user_id, body, refered_to) VALUES(:title, :user_id, :body, :image_id)');
             //Bind values
             $this->db->bind(':title', $data['title']);
             $this->db->bind(':user_id', $data['user_id']);
             $this->db->bind(':body', $data['body']);
+            $this->db->bind(':image_id', $data['image_id']);
 
             //Execure
             if($this->db->execute()){
@@ -65,11 +66,31 @@
             //Bind values
             $this->db->bind(':id', $id);
 
-            //Execure
+            //Execute
             if($this->db->execute()){
                 return true;
             } else {
                 return false;
             }
+        }
+
+        public function getCommentsByImageId($id){
+            $this->db->query('SELECT *,  
+            comments.id AS commentId,
+            users.id AS userId,
+            comments.created_at AS commentCreated,
+            users.created_at AS userCreated,
+            users.name AS userName
+            FROM comments
+            JOIN users
+            ON comments.user_id = users.id
+            WHERE
+            comments.refered_to = :image_id
+            ORDER BY comments.created_at DESC');
+            $this->db->bind(':image_id', $id);
+
+            $results = $this->db->resultSet();
+
+            return $results;
         }
     }

@@ -35,4 +35,16 @@
             $row = $this->db->single();
             return $row;
         }
+
+        public function deleteImage($id) {
+            $this->db->query('DELETE FROM images WHERE id = :id;');
+            $this->db->bind(':id', $id);
+
+            // Execute
+            if($this->db->execute()){
+                return true;
+            } else {
+                return false;
+            }
+        }
     }

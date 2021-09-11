@@ -14,7 +14,8 @@
             <?php endif; ?>
 
             <?php if (!empty($_FILES) && empty($data['errors'])): ?>
-            <div class="alert alert-success">Файлы успешно загружены</div>
+            <!-- <div class="alert alert-success">Файлы успешно загружены</div> -->
+            <?php flash('upload_success'); ?>
             <?php endif; ?>
 
             <input type="file" class="form-control" name="files[]" accept="<?php echo implode(', ', $data['file_types'])?>" id="customFile" multiple required>

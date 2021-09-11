@@ -20,7 +20,7 @@
             $this->view('comments/index', $data);
         }
 
-        public function add(){
+        public function add($image_id){
 
             if($_SERVER['REQUEST_METHOD'] == 'POST'){
                 //Sanitize POST array
@@ -31,7 +31,8 @@
                     'body' => trim($_POST['body']),
                     'user_id' => $_SESSION['user_id'],
                     'title_err' => '',
-                    'body_err' => ''
+                    'body_err' => '',
+                    'image_id' => $image_id,
                 ];
 
                 //Validate title
@@ -47,7 +48,7 @@
                     //VAlidated
                     if($this->commentModel->addComment($data)){
                         flash('comment_message', 'Comment Added');
-                        redirect('comments');
+                        redirect('images/show/' . $image_id . '#comments');
                     } else {
                         die('something went wrong');
                     }
@@ -72,6 +73,7 @@
             if($_SERVER['REQUEST_METHOD'] == 'POST'){
                 //Sanitize POST array
                 $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+                $comment = $this->commentModel->getCommentById($id);
 
                 $data = [
                     'title' => trim($_POST['title']),
@@ -95,7 +97,7 @@
                     //VAlidated
                     if($this->commentModel->updateComment($data)){
                         flash('comment_message', 'Comment Updated');
-                        redirect('comments');
+                        redirect('images/show/' . $comment->refered_to . '/#comments');
                     } else {
                         die('something went wrong');
                     }
@@ -146,7 +148,7 @@
 
                 if($this->commentModel->deleteComment($id)){
                     flash('comment_message', 'Comment removed');
-                    redirect('comments');
+                    redirect('images/show/' . $comment->refered_to . '#comments');
                 } else {
                     die('something went wrong');
                 }

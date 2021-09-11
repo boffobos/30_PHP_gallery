@@ -21,4 +21,5 @@
   define('MIN_USER_PASS_LENGTH', 6);
   define('MAX_FILE_SIZE', 1000000);
   define('ALLOWED_FILE_TYPES', ['image/jpeg', 'image/png', 'image/gif', 'image/svg']);
-  define('UPLOAD_DIR', 'img/');
+  define('UPLOAD_DIR', '\\public\\img\\');
+  define('ROOT_DIR', dirname(__FILE__, 3));

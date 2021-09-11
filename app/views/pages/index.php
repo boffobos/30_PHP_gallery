@@ -52,20 +52,24 @@
       </div>
     </div>
   </div>
-
+            <?php //echo var_dump($data['images']); ?>
   <div class="album py-5 bg-light">
     <div class="container">
+    <?php flash('comment_message'); ?>
       <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
 
           <?php foreach($data['images'] as $image) : ?>
+          <?php if(!file_exists($image->path)) continue; ?>
           <div class="col">
             <div class="card shadow-sm">
-              <img class="bd-placeholder-img card-img-top" width="100%" height="225"
-              src="<?php echo $image->path; ?>"
-              alt="<?php echo $image->name; ?>"
-              >
+              <a href="<?php echo URLROOT; ?>/images/show/<?php echo $image->id; ?>">
+                <img class="bd-placeholder-img card-img-top" width="100%" height="225"
+                  src="<?php echo URLROOT . UPLOAD_DIR . $image->name; ?>"
+                  alt="<?php echo $image->name; ?>"
+                >
+              </a>
               <div class="card-body">
-                <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                <p class="card-text"><?php echo $image->last_comment; ?></p>
                 <div class="d-flex justify-content-between align-items-center">
                   <div class="btn-group">
                     <a href="<?php echo URLROOT; ?>/images/show/<?php echo $image->id; ?>" class="btn btn-sm btn-outline-secondary">Show</a>
@@ -73,7 +77,7 @@
                     <a href="<?php echo URLROOT; ?>/images/comment/<?php echo $image->id; ?>" class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#exampleModalDefault">Comment</a>
                     <?php endif; ?>
                   </div>
-                  <small class="text-muted">9 mins</small>
+                  <small class="text-muted"><?php echo $image->last_comment_date; ?></small>
                 </div>
               </div>
             </div>
