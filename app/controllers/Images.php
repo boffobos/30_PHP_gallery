@@ -33,7 +33,17 @@
                         }
                 
                         $filePath = ROOT_DIR . UPLOAD_DIR . basename($fileName);
-                
+                        $j = 1;
+                        while(file_exists($filePath)) {
+                            $fileName = explode('.', $fileName);
+                            $fileName[0] .= '_'. $j;
+                            $fileName = implode('.', $fileName);
+                            $filePath = ROOT_DIR . UPLOAD_DIR . basename($fileName);
+                            $j++;
+                        }
+
+                        echo $filePath;
+
                         if (!move_uploaded_file($_FILES['files']['tmp_name'][$i], $filePath)) {
                             $data['errors'][] = 'Uploading error ' . $fileName;
                             continue;
